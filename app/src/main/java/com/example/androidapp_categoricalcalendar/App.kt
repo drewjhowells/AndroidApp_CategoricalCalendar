@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
@@ -36,7 +37,7 @@ class App : ComponentActivity() {
 						FloatingActionButton(onClick = {
 							//Do Something
 						}) {
-							Icon(Icons.Default.Settings, contentDescription = "Settings")
+							Icon(Icons.Default.Add, contentDescription = "Add Event")
 						}
 					},
 					bottomBar = {
@@ -45,12 +46,17 @@ class App : ComponentActivity() {
 								BottomNavItem(
 									name = "Agenda",
 									route = "AgendaScreen",
-									icon = Icons.Default.DateRange
+									icon = Icons.Default.List
 								),
 								BottomNavItem(
 									name = "Categories",
 									route = "CategoryScreen",
-									icon = Icons.Default.List
+									icon = Icons.Default.Settings
+								),
+								BottomNavItem(
+									name = "WeekView",
+									route = "WeekView",
+									icon = Icons.Default.DateRange
 								)
 							),
 							navController = navController,
@@ -65,7 +71,7 @@ class App : ComponentActivity() {
 						modifier = Modifier
 							.fillMaxSize()
 							.padding(paddingValues),
-						color = Color.DarkGray
+						color = Color.Black
 					) {
 						Navigation(navController = navController)
 					}

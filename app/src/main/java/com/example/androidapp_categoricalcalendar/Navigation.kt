@@ -24,7 +24,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
 fun Navigation(navController: NavHostController) {
-	NavHost(navController = navController, startDestination = Screen.AgendaScreen.route) {
+	NavHost(navController = navController, startDestination = Screen.WeekView.route) {
+		composable(Screen.WeekView.route) {
+			Category(navController = navController)
+		}
 		composable(Screen.AgendaScreen.route) {
 			Agenda(navController = navController)
 		}
@@ -45,7 +48,7 @@ fun BottomNavigationBar(
 	val backStackEntry = navController.currentBackStackEntryAsState()
 	NavigationBar (
 		modifier = Modifier,
-		containerColor = Color.Black,
+		containerColor = Color.DarkGray,
 		tonalElevation = 5.dp
 	){
 		items.forEach {item ->
@@ -53,8 +56,9 @@ fun BottomNavigationBar(
 			NavigationBarItem(
 				selected = selected,
 				colors = NavigationBarItemDefaults.colors(
-					selectedIconColor = Color.Blue,
-					unselectedIconColor = Color.White
+					selectedIconColor = Color.DarkGray,
+					unselectedIconColor = Color.White,
+					indicatorColor = Color.White,
 				),
 				onClick = { onItemClick(item) },
 				icon = {
@@ -80,7 +84,7 @@ fun BottomNavigationBar(
 							Text(
 								text = item.name,
 								textAlign = TextAlign.Center,
-								fontSize = 10.sp
+								fontSize = 15.sp
 							)
 						}
 					}
