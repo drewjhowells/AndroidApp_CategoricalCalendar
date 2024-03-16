@@ -10,24 +10,31 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
+import com.example.androidapp_categoricalcalendar.data.Database
+import com.example.androidapp_categoricalcalendar.nav.BottomNavItem
+import com.example.androidapp_categoricalcalendar.nav.BottomNavigationBar
+import com.example.androidapp_categoricalcalendar.nav.Navigation
 import com.example.androidapp_categoricalcalendar.ui.theme.AndroidApp_CategoricalCalendarTheme
 
 class App : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		//Build db
+		val db = Room.databaseBuilder(
+			applicationContext,
+			Database::class.java, "db"
+		).build()
+		val taskDao = db.eventDao()
+
 		setContent {
 			val navController = rememberNavController()
 			AndroidApp_CategoricalCalendarTheme {
@@ -36,6 +43,7 @@ class App : ComponentActivity() {
 					floatingActionButton = {
 						FloatingActionButton(onClick = {
 							//Do Something
+							navController.navigate("AddEventView")
 						}) {
 							Icon(Icons.Default.Add, contentDescription = "Add Event")
 						}
@@ -44,19 +52,19 @@ class App : ComponentActivity() {
 						BottomNavigationBar(
 							items = listOf(
 								BottomNavItem(
+									name = "Week",
+									route = "WeekView",
+									icon = Icons.Default.DateRange
+								),
+								BottomNavItem(
 									name = "Agenda",
-									route = "AgendaScreen",
+									route = "AgendaView",
 									icon = Icons.Default.List
 								),
 								BottomNavItem(
 									name = "Categories",
-									route = "CategoryScreen",
+									route = "CategoryView",
 									icon = Icons.Default.Settings
-								),
-								BottomNavItem(
-									name = "WeekView",
-									route = "WeekView",
-									icon = Icons.Default.DateRange
 								)
 							),
 							navController = navController,

@@ -1,4 +1,4 @@
-package com.example.androidapp_categoricalcalendar
+package com.example.androidapp_categoricalcalendar.nav
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Badge
@@ -21,18 +21,25 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.androidapp_categoricalcalendar.views.AddEventView
+import com.example.androidapp_categoricalcalendar.views.AgendaView
+import com.example.androidapp_categoricalcalendar.views.CategoryView
+import com.example.androidapp_categoricalcalendar.views.WeekView
 
 @Composable
 fun Navigation(navController: NavHostController) {
 	NavHost(navController = navController, startDestination = Screen.WeekView.route) {
 		composable(Screen.WeekView.route) {
-			Category(navController = navController)
+			WeekView(navController = navController)
 		}
-		composable(Screen.AgendaScreen.route) {
-			Agenda(navController = navController)
+		composable(Screen.AgendaView.route) {
+			AgendaView(navController = navController)
 		}
-		composable(Screen.CategoryScreen.route) {
-			Category(navController = navController)
+		composable(Screen.CategoryView.route) {
+			CategoryView(navController = navController)
+		}
+		composable(Screen.AddEventView.route) {
+			AddEventView(navController = navController)
 		}
 	}
 }

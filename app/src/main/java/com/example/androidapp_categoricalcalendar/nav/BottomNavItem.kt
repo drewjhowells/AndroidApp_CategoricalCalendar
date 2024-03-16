@@ -1,4 +1,4 @@
-package com.example.androidapp_categoricalcalendar
+package com.example.androidapp_categoricalcalendar.nav
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
