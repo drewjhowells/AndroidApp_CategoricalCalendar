@@ -11,6 +11,7 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.RoomDatabase
 import androidx.room.Update
+import java.sql.Time
 
 //Database class using Task entities
 @Database(entities = [Event::class], version = 1)
@@ -24,12 +25,12 @@ interface EventDao {
 	//Define SQL functions to use by DAO object
 	@Query("SELECT * FROM event")
 	suspend fun getAll(): MutableList<Event>
-	@Query("SELECT * FROM event WHERE name = :name")
-	suspend fun getTaskByName(name: String): Event?
+	@Query("SELECT * FROM event WHERE title = :title")
+	suspend fun getTaskByName(title: String): Event?
 	@Insert
 	suspend fun insertAll(vararg events: Event)
 	@Update(entity = Event::class)
-	suspend fun updateEvent(task : Event)
+	suspend fun updateEvent(event : Event)
 	@Delete
 	suspend fun delete(event: Event)
 
@@ -45,8 +46,8 @@ interface EventDao {
 //Table definition for Task Entities
 @Entity
 data class Event(
-	@PrimaryKey val name: String,
+	@PrimaryKey val title: String,
 	@ColumnInfo(name = "category") val category: String,
 	@ColumnInfo(name = "duration") val duration: Int = 60,
-	@ColumnInfo(name = "startTime") val startTime: Long = System.currentTimeMillis()
+	@ColumnInfo(name = "startTime") val startTime: Int
 )

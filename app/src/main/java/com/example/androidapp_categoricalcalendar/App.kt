@@ -23,6 +23,7 @@ import com.example.androidapp_categoricalcalendar.data.Database
 import com.example.androidapp_categoricalcalendar.nav.BottomNavItem
 import com.example.androidapp_categoricalcalendar.nav.BottomNavigationBar
 import com.example.androidapp_categoricalcalendar.nav.Navigation
+import com.example.androidapp_categoricalcalendar.nav.Screen
 import com.example.androidapp_categoricalcalendar.ui.theme.AndroidApp_CategoricalCalendarTheme
 
 class App : ComponentActivity() {
@@ -33,7 +34,7 @@ class App : ComponentActivity() {
 			applicationContext,
 			Database::class.java, "db"
 		).build()
-		val taskDao = db.eventDao()
+		val eventDao = db.eventDao()
 
 		setContent {
 			val navController = rememberNavController()
@@ -81,7 +82,7 @@ class App : ComponentActivity() {
 							.padding(paddingValues),
 						color = Color.Black
 					) {
-						Navigation(navController = navController)
+						Navigation(navController = navController, eventDao)
 					}
 				}
 

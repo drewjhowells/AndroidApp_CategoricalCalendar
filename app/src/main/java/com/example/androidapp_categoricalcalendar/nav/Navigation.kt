@@ -21,25 +21,27 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.room.RoomDatabase
+import com.example.androidapp_categoricalcalendar.data.EventDao
 import com.example.androidapp_categoricalcalendar.views.AddEventView
 import com.example.androidapp_categoricalcalendar.views.AgendaView
 import com.example.androidapp_categoricalcalendar.views.CategoryView
 import com.example.androidapp_categoricalcalendar.views.WeekView
 
 @Composable
-fun Navigation(navController: NavHostController) {
-	NavHost(navController = navController, startDestination = Screen.WeekView.route) {
+fun Navigation(navController: NavHostController, eventDao: EventDao) {
+	NavHost(navController = navController, startDestination = Screen.AgendaView.route) {
 		composable(Screen.WeekView.route) {
 			WeekView(navController = navController)
 		}
 		composable(Screen.AgendaView.route) {
-			AgendaView(navController = navController)
+			AgendaView(navController = navController, eventDao)
 		}
 		composable(Screen.CategoryView.route) {
 			CategoryView(navController = navController)
 		}
 		composable(Screen.AddEventView.route) {
-			AddEventView(navController = navController)
+			AddEventView(navController = navController, eventDao)
 		}
 	}
 }
