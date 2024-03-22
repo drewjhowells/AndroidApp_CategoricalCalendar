@@ -22,10 +22,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.room.RoomDatabase
+import com.example.androidapp_categoricalcalendar.data.Event
 import com.example.androidapp_categoricalcalendar.data.EventDao
 import com.example.androidapp_categoricalcalendar.views.AddEventView
 import com.example.androidapp_categoricalcalendar.views.AgendaView
 import com.example.androidapp_categoricalcalendar.views.CategoryView
+import com.example.androidapp_categoricalcalendar.views.EditEventView
 import com.example.androidapp_categoricalcalendar.views.WeekView
 
 @Composable
@@ -42,6 +44,10 @@ fun Navigation(navController: NavHostController, eventDao: EventDao) {
 		}
 		composable(Screen.AddEventView.route) {
 			AddEventView(navController = navController, eventDao)
+		}
+		composable(Screen.EditEventView.route) {entry ->
+			val clickedEventID = entry.arguments?.getString("editId")?.toInt()!!
+			EditEventView(navController = navController, eventDao, clickedEventID)
 		}
 	}
 }

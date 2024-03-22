@@ -5,4 +5,5 @@ sealed class Screen(val route: String) {
 	object AgendaView : Screen("AgendaView")
 	object CategoryView : Screen("CategoryView")
 	object AddEventView : Screen("AddEventView")
+	object EditEventView : Screen("EditEventView/{editId}")
 }

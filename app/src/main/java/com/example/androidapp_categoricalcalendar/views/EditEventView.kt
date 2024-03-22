@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,23 +29,26 @@ import androidx.navigation.NavHostController
 import com.example.androidapp_categoricalcalendar.data.Event
 import com.example.androidapp_categoricalcalendar.data.EventDao
 import kotlinx.coroutines.runBlocking
-import java.sql.Time
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddEventView(navController: NavHostController, eventDao: EventDao) {
+fun EditEventView(navController: NavHostController, eventDao: EventDao, eventID: Int) {
+	Text(text = "${eventID}")
+	val event : Event
+	runBlocking {
+		event = eventID.let { eventDao.getEventByID(it) }!!
+	}
 	var eventTitle by remember {
-		mutableStateOf("")
+		mutableStateOf(event.title)
 	}
 	var eventCategory by remember {
-		mutableStateOf("")
+		mutableStateOf(event.category)
 	}
 	Column (
 		modifier = Modifier.fillMaxSize()
 	){
 		Text(
-			text = "New Event Details",
+			text = "Edit Event Details",
 			fontSize = 30.sp,
 			color = Color.White,
 			modifier = Modifier
@@ -80,14 +86,16 @@ fun AddEventView(navController: NavHostController, eventDao: EventDao) {
 			mutableStateOf(false)
 		}
 		var duration by remember {
-			mutableStateOf("Duration")
+			mutableStateOf(event.duration.toString())
 		}
 		var startTime by remember {
-			mutableStateOf("Start Time")
+			mutableStateOf(event.startTime.toString())
 		}
 		Row {
 			ExposedDropdownMenuBox(
-				modifier = Modifier.padding(5.dp).weight(1f),
+				modifier = Modifier
+					.padding(5.dp)
+					.weight(1f),
 				expanded = isDurationExpanded,
 				onExpandedChange =  { isDurationExpanded = it}
 			) {
@@ -145,7 +153,9 @@ fun AddEventView(navController: NavHostController, eventDao: EventDao) {
 				}
 			}
 			ExposedDropdownMenuBox(
-				modifier = Modifier.padding(5.dp).weight(1f),
+				modifier = Modifier
+					.padding(5.dp)
+					.weight(1f),
 				expanded = isTimeExpanded,
 				onExpandedChange =  { isTimeExpanded = it}
 			) {
@@ -178,17 +188,26 @@ fun AddEventView(navController: NavHostController, eventDao: EventDao) {
 				}
 			}
 		}
-
-		Button(
-			modifier = Modifier.align(Alignment.CenterHorizontally),
-			onClick = {
-				navController.navigate("AgendaView")
-				runBlocking {
-					val newEvent : Event = Event(title = eventTitle, category = eventCategory, duration = duration.toInt(), startTime = startTime.toInt())
-					eventDao.insertAll(newEvent)
-				}
-		}) {
-			Text(text = "Add Event")
+		Row {
+			Button(
+				onClick = {
+					navController.navigate("AgendaView")
+					runBlocking {
+						eventDao.updateEvent(event)
+					}
+				}) {
+				Text(text = "Update Event")
+			}
+			Button(
+				onClick = {
+					navController.navigate("AgendaView")
+					runBlocking {
+						eventDao.delete(event)
+					}
+				}) {
+				Icon(Icons.Default.Delete, contentDescription = "Delete")
+			}
 		}
+
 	}
 }

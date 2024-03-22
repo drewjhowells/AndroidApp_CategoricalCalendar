@@ -23,10 +23,10 @@ abstract class Database : RoomDatabase() {
 @Dao
 interface EventDao {
 	//Define SQL functions to use by DAO object
-	@Query("SELECT * FROM event")
+	@Query("SELECT * FROM event ORDER BY startTime")
 	suspend fun getAll(): MutableList<Event>
-	@Query("SELECT * FROM event WHERE title = :title")
-	suspend fun getTaskByName(title: String): Event?
+	@Query("SELECT * FROM event WHERE id = :id")
+	suspend fun getEventByID(id : Int): Event?
 	@Insert
 	suspend fun insertAll(vararg events: Event)
 	@Update(entity = Event::class)
@@ -46,8 +46,9 @@ interface EventDao {
 //Table definition for Task Entities
 @Entity
 data class Event(
-	@PrimaryKey val title: String,
+	@PrimaryKey(autoGenerate = true) val id: Int = 0,
+	@ColumnInfo(name = "title") val title: String,
 	@ColumnInfo(name = "category") val category: String,
-	@ColumnInfo(name = "duration") val duration: Int = 60,
+	@ColumnInfo(name = "duration") val duration: Int,
 	@ColumnInfo(name = "startTime") val startTime: Int
 )
