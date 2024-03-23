@@ -47,8 +47,8 @@ interface EventDao {
 @Entity
 data class Event(
 	@PrimaryKey(autoGenerate = true) val id: Int = 0,
-	@ColumnInfo(name = "title") val title: String,
-	@ColumnInfo(name = "category") val category: String,
-	@ColumnInfo(name = "duration") val duration: Int,
-	@ColumnInfo(name = "startTime") val startTime: Int
+	@ColumnInfo(name = "title") var title: String,
+	@ColumnInfo(name = "category") var category: String,
+	@ColumnInfo(name = "duration") var duration: Int,
+	@ColumnInfo(name = "startTime") var startTime: Int
 )

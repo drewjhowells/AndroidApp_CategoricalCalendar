@@ -33,16 +33,15 @@ import kotlinx.coroutines.runBlocking
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditEventView(navController: NavHostController, eventDao: EventDao, eventID: Int) {
-	Text(text = "${eventID}")
-	val event : Event
-	runBlocking {
-		event = eventID.let { eventDao.getEventByID(it) }!!
+	Text(text = "$eventID")
+	val event = runBlocking {
+		eventID.let { eventDao.getEventByID(eventID) }
 	}
 	var eventTitle by remember {
-		mutableStateOf(event.title)
+		mutableStateOf(event?.title)
 	}
 	var eventCategory by remember {
-		mutableStateOf(event.category)
+		mutableStateOf(event?.category)
 	}
 	Column (
 		modifier = Modifier.fillMaxSize()
@@ -55,30 +54,34 @@ fun EditEventView(navController: NavHostController, eventDao: EventDao, eventID:
 				.align(Alignment.CenterHorizontally)
 				.padding(10.dp)
 		)
-		TextField(
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(5.dp),
-			placeholder = {
-				Text(text = "Title")
-			},
-			value = eventTitle,
-			onValueChange = {textEntered ->
-				eventTitle = textEntered
-			}
-		)
-		TextField(
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(5.dp),
-			placeholder = {
-				Text(text = "Category")
-			},
-			value = eventCategory,
-			onValueChange = {textEntered ->
-				eventCategory = textEntered
-			}
-		)
+		eventTitle?.let {
+			TextField(
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(5.dp),
+				placeholder = {
+					Text(text = "Title")
+				},
+				value = it,
+				onValueChange = {textEntered ->
+					eventTitle = textEntered
+				}
+			)
+		}
+		eventCategory?.let {
+			TextField(
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(5.dp),
+				placeholder = {
+					Text(text = "Category")
+				},
+				value = it,
+				onValueChange = {textEntered ->
+					eventCategory = textEntered
+				}
+			)
+		}
 		var isDurationExpanded by remember {
 			mutableStateOf(false)
 		}
@@ -86,10 +89,10 @@ fun EditEventView(navController: NavHostController, eventDao: EventDao, eventID:
 			mutableStateOf(false)
 		}
 		var duration by remember {
-			mutableStateOf(event.duration.toString())
+			mutableStateOf(event?.duration.toString())
 		}
 		var startTime by remember {
-			mutableStateOf(event.startTime.toString())
+			mutableStateOf(event?.startTime.toString())
 		}
 		Row {
 			ExposedDropdownMenuBox(
@@ -191,19 +194,27 @@ fun EditEventView(navController: NavHostController, eventDao: EventDao, eventID:
 		Row {
 			Button(
 				onClick = {
-					navController.navigate("AgendaView")
+					event?.title = eventTitle.toString()
+					event?.duration = duration.toInt()
+					event?.category = eventCategory.toString()
+					event?.startTime = startTime.toInt()
 					runBlocking {
-						eventDao.updateEvent(event)
+						if (event != null) {
+							eventDao.updateEvent(event)
+						}
 					}
+					navController.navigate("AgendaView")
 				}) {
 				Text(text = "Update Event")
 			}
 			Button(
 				onClick = {
-					navController.navigate("AgendaView")
 					runBlocking {
-						eventDao.delete(event)
+						event?.let {
+							eventDao.delete(event)
+						}
 					}
+					navController.navigate("AgendaView")
 				}) {
 				Icon(Icons.Default.Delete, contentDescription = "Delete")
 			}
